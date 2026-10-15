@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentics Foundation London - Slides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #E25C3D;
+    --primary-dark: #C74D2F;
+    --background: #FEF9F5;
+    --foreground: #1F1F1F;
+    --secondary: #6B6862;
+    --muted: #E3E1DF;
+    --comet: #FF6B47;
+    --radius: 32px;
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; overflow: hidden; }
+
+  body {
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    background: var(--background);
+    color: var(--foreground);
+    line-height: 1.6;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .eyebrow {
+    font-size: clamp(.8rem, 1.2vw, 1rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--primary);
+  }
+
+  /* ---------- Deck ---------- */
+
+  .deck { position: relative; z-index: 1; height: 100vh; width: 100vw; }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem 6rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(40px);
+    transition: opacity .4s ease, transform .4s ease, visibility .4s;
+  }
+
+  .slide.is-active { opacity: 1; visibility: visible; transform: none; }
+  .slide.is-past { transform: translateX(-40px); }
+
+  .slide-inner { width: 100%; max-width: 1200px; }
+
+  .brand { display: flex; align-items: center; gap: clamp(1rem, 2vw, 1.5rem); }
+  .logo { height: clamp(48px, 7vh, 72px); width: auto; }
+  .brand-mark {
+    height: clamp(64px, 10vh, 96px);
+    width: auto;
+    border-radius: 22px;
+  }
+
+  /* ---------- Infinity loop background ---------- */
+
+  .loop-bg {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    transition: opacity .4s ease;
+  }
+
+  .loop-bg.is-hidden { opacity: 0; }
+  .loop-bg.is-hidden .loop-spin, .loop-bg.is-hidden .loop-comet { animation-play-state: paused; }
+
+  .loop-spin {
+    transform-origin: 0 0;
+    animation: loop-breathe 24s ease-in-out infinite;
+  }
+
+  .loop-strand { fill: none; stroke: var(--primary); stroke-width: 9; opacity: .22; }
+
+  .loop-comet {
+    fill: none;
+    stroke: var(--comet);
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 90 910;
+    opacity: .95;
+    animation: loop-travel linear infinite;
+  }
+
+  @keyframes loop-travel { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
+
+  @keyframes loop-breathe {
+    0%, 100% { transform: rotate(-4deg) scale(1); }
+    50% { transform: rotate(4deg) scale(1.06); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loop-spin, .loop-comet { animation: none; }
+  }
+
+  /* ---------- Slide 1: Welcome ---------- */
+
+  .welcome { position: relative; isolation: isolate; display: grid; gap: clamp(1.5rem, 3vh, 2.5rem); }
+
+  /* A soft pool of background colour behind the text, so the loop fades out where people read. */
+  .welcome::before {
+    content: "";
+    position: absolute;
+    inset: -24% -12% -24% -28%;
+    z-index: -1;
+    background: radial-gradient(closest-side, var(--background) 68%, rgba(254, 249, 245, .85) 84%, rgba(254, 249, 245, 0) 100%);
+  }
+
+  .welcome h1 { font-size: clamp(3.5rem, 9vw, 8rem); }
+  .welcome h1 strong { color: var(--primary); font-weight: 600; }
+
+  .welcome .lead {
+    font-size: clamp(1rem, 1.6vw, 1.35rem);
+    color: var(--secondary);
+    max-width: 60ch;
+  }
+
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+
+  .pill { font-size: clamp(.85rem, 1.2vw, 1rem); font-weight: 500; }
+
+  .pill b { color: var(--primary); }
+
+  /* ---------- Slide 2: Numbers ---------- */
+
+  .numbers h2 { font-size: clamp(2.5rem, 5vw, 4.5rem); margin: .5rem 0 2rem; }
+
+  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(1.5rem, 4vh, 3rem) 3rem; }
+
+  .stat-value {
+    font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+    font-weight: 600;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1;
+    color: var(--primary);
+  }
+
+  .stat-label { margin-top: .5rem; font-size: clamp(.9rem, 1.3vw, 1.1rem); font-weight: 500; }
+
+  .site-link { margin-top: 2.5rem; font-size: clamp(.9rem, 1.3vw, 1.1rem); font-weight: 500; }
+
+  /* ---------- Slide 3: Agenda ---------- */
+
+  .agenda h2 { font-size: clamp(2.5rem, 5vw, 4.5rem); margin: .5rem 0 1.5rem; }
+
+  .agenda-list { list-style: none; display: grid; gap: clamp(1.25rem, 3.5vh, 2.25rem); }
+
+  .agenda-item {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  .agenda-num {
+    font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+    font-size: 2.5rem;
+    line-height: 1;
+    color: var(--primary);
+  }
+
+  .agenda-item h3 { font-size: clamp(1.6rem, 2.6vw, 2.25rem); }
+
+  .speakers { display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; margin-top: .75rem; }
+
+  .speaker { display: flex; align-items: center; gap: .6rem; font-weight: 500; font-size: clamp(.85rem, 1.2vw, 1rem); }
+
+  .avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--muted);
+    display: grid; place-items: center;
+    font-size: .8rem; font-weight: 600; color: var(--secondary);
+  }
+
+  /* ---------- Controls ---------- */
+
+  .controls {
+    position: fixed;
+    bottom: 1.5rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 10;
+  }
+
+  .nav-btn {
+    font-family: inherit;
+    font-weight: 600;
+    font-size: .9rem;
+    padding: .65rem 1.4rem;
+    border-radius: var(--radius);
+    border: 2px solid var(--primary);
+    background: transparent;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+
+  .nav-btn:hover:not(:disabled) { background: var(--primary); color: var(--background); box-shadow: var(--shadow-md); }
+  .nav-btn:active:not(:disabled) { transform: translateY(1px); }
+  .nav-btn:disabled { opacity: .35; cursor: default; }
+
+  .dots { display: flex; gap: .5rem; }
+
+  .dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: none;
+    background: var(--muted);
+    cursor: pointer;
+    transition: background .2s ease, width .2s ease;
+  }
+
+  .dot.is-active { background: var(--primary); width: 32px; border-radius: 9999px; }
+
+  .counter { position: fixed; top: 1.5rem; right: 2rem; font-size: .85rem; color: var(--secondary); }
+
+  :focus { outline: 2px solid var(--primary); outline-offset: 2px; }
+  :focus:not(:focus-visible) { outline: none; }
+
+  a { color: var(--primary); text-underline-offset: 4px; }
+  a:hover { color: var(--primary-dark); }
+
+  @media (max-width: 768px) {
+    .pillars, .stats { grid-template-columns: 1fr; }
+    .slide { align-items: flex-start; overflow-y: auto; }
+  }
+</style>
+</head>
+<body>
+
+<svg class="loop-bg" id="loop-bg" viewBox="-600 -300 1200 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g class="loop-spin">
+    <g id="loop-strands"></g>
+    <g id="loop-comets" filter="url(#glow)"></g>
+  </g>
+</svg>
+
+<span class="counter" id="counter" aria-live="polite">1 / 3</span>
+
+<main class="deck" id="deck">
+
+  <!-- Slide 1: Welcome -->
+  <section class="slide is-active" aria-label="Welcome">
+    <div class="slide-inner welcome">
+      <div class="brand">
+        <img class="brand-mark" src="assets/agentics-mark.jpeg" alt="">
+        <img class="logo" src="assets/agentics-logo.svg" alt="Agentics Foundation">
+      </div>
+      <p class="eyebrow">Agentics Foundation · London Chapter</p>
+      <h1>Welcome to <strong>Agentics</strong></h1>
+      <p class="lead">A global, open-source community building autonomous agents that think, adapt, and collaborate. Founded by Reuven Cohen (rUv) in 2024. The London chapter launched in May 2025 and runs meetups and workshops where people build working agents.</p>
+      <div class="pillars">
+        <div class="pill"><b>Open source</b> - built in public</div>
+        <div class="pill"><b>Hands-on</b> - prototypes, not slideware</div>
+        <div class="pill"><b>Global</b> - free to join</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 2: Numbers -->
+  <section class="slide" aria-label="Numbers">
+    <div class="slide-inner numbers">
+      <p class="eyebrow">By the numbers</p>
+      <h2>A worldwide movement</h2>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value">100M+</div>
+          <div class="stat-label">downloads of rUv's open-source repos</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">#1</div>
+          <div class="stat-label">top global developer on the GitHub leaderboard</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">100K+</div>
+          <div class="stat-label">community members worldwide</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">2000</div>
+          <div class="stat-label">cities worldwide</div>
+        </div>
+      </div>
+      <p class="site-link"><a href="https://agentics.org" target="_blank" rel="noopener">agentics.org</a></p>
+    </div>
+  </section>
+
+  <!-- Slide 3: Agenda -->
+  <section class="slide" aria-label="Agenda">
+    <div class="slide-inner agenda">
+      <p class="eyebrow">Tonight</p>
+      <h2>Agenda</h2>
+      <ol class="agenda-list">
+        <li class="agenda-item">
+          <span class="agenda-num">01</span>
+          <div>
+            <h3>Demo of rUv's stack</h3>
+            <div class="speakers">
+              <span class="speaker"><img class="avatar" src="assets/ruv.jpg" alt="">rUv</span>
+            </div>
+          </div>
+        </li>
+        <li class="agenda-item">
+          <span class="agenda-num">02</span>
+          <div>
+            <h3>Lightning talks</h3>
+            <div class="speakers">
+              <span class="speaker"><img class="avatar" src="assets/colm.jpeg" alt="">Colm Byrne</span>
+              <span class="speaker"><span class="avatar" aria-hidden="true">PB</span>Peter Bricknell</span>
+              <span class="speaker"><img class="avatar" src="assets/dinis.jpg" alt="">Dinis Cruz</span>
+            </div>
+          </div>
+        </li>
+        <li class="agenda-item">
+          <span class="agenda-num">03</span>
+          <div>
+            <h3>Closing Q&amp;A</h3>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+</main>
+
+<nav class="controls" aria-label="Slide navigation">
+  <button class="nav-btn" id="prev" type="button">Prev</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="next" type="button">Next</button>
+</nav>
+
+<script>
+  drawInfinityLoop();
+
+  // Three parallel strands echo the Agentics mark. Each strand is the lemniscate
+  // pushed out along its normal, so the lines stay evenly spaced through the crossing.
+  function drawInfinityLoop() {
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const strandOffsets = [-30, 0, 30];
+    const cometsPerStrand = [{ seconds: 11 }, { seconds: 17 }];
+    const strands = document.getElementById('loop-strands');
+    const comets = document.getElementById('loop-comets');
+
+    strandOffsets.forEach((offset, strandIndex) => {
+      const d = lemniscatePath(480, offset, 480);
+      strands.appendChild(makePath(d, 'loop-strand'));
+
+      cometsPerStrand.forEach(({ seconds }, cometIndex) => {
+        const comet = makePath(d, 'loop-comet');
+        const duration = seconds + strandIndex * 2;
+        comet.style.animationDuration = `${duration}s`;
+        comet.style.animationDelay = `${-duration * (cometIndex / cometsPerStrand.length + strandIndex * 0.17)}s`;
+        comets.appendChild(comet);
+      });
+    });
+
+    function makePath(d, className) {
+      const path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('class', className);
+      path.setAttribute('pathLength', '1000');
+      return path;
+    }
+  }
+
+  function lemniscatePath(size, offset, samples) {
+    const pointAt = (t) => {
+      const denominator = 1 + Math.sin(t) ** 2;
+      return [size * Math.cos(t) / denominator, size * Math.sin(t) * Math.cos(t) / denominator];
+    };
+    const points = [];
+    for (let i = 0; i < samples; i++) {
+      const t = (i / samples) * Math.PI * 2;
+      const [x, y] = pointAt(t);
+      const [xAhead, yAhead] = pointAt(t + 0.001);
+      const length = Math.hypot(xAhead - x, yAhead - y);
+      const normalX = -(yAhead - y) / length;
+      const normalY = (xAhead - x) / length;
+      points.push(`${(x + normalX * offset).toFixed(1)},${(y + normalY * offset).toFixed(1)}`);
+    }
+    return `M${points.join('L')}Z`;
+  }
+
+  const slides = [...document.querySelectorAll('.slide')];
+  const dotsContainer = document.getElementById('dots');
+  const prevButton = document.getElementById('prev');
+  const nextButton = document.getElementById('next');
+  const counter = document.getElementById('counter');
+  const loopBackground = document.getElementById('loop-bg');
+  let current = 0;
+
+  const dots = slides.map((slide, index) => {
+    const dot = document.createElement('button');
+    dot.className = 'dot';
+    dot.type = 'button';
+    dot.setAttribute('aria-label', `Go to slide ${index + 1}: ${slide.getAttribute('aria-label')}`);
+    dot.addEventListener('click', () => showSlide(index));
+    dotsContainer.appendChild(dot);
+    return dot;
+  });
+
+  function showSlide(index) {
+    current = Math.max(0, Math.min(index, slides.length - 1));
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('is-active', i === current);
+      slide.classList.toggle('is-past', i < current);
+    });
+    dots.forEach((dot, i) => dot.classList.toggle('is-active', i === current));
+    prevButton.disabled = current === 0;
+    nextButton.disabled = current === slides.length - 1;
+    counter.textContent = `${current + 1} / ${slides.length}`;
+    loopBackground.classList.toggle('is-hidden', current !== 0);
+  }
+
+  prevButton.addEventListener('click', () => showSlide(current - 1));
+  nextButton.addEventListener('click', () => showSlide(current + 1));
+
+  // Clicking empty slide space advances, but links and buttons keep their own behaviour.
+  document.getElementById('deck').addEventListener('click', (event) => {
+    if (!event.target.closest('a, button')) showSlide(current + 1);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (['ArrowRight', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); showSlide(current + 1); }
+    if (['ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); showSlide(current - 1); }
+    if (event.key === 'Home') showSlide(0);
+    if (event.key === 'End') showSlide(slides.length - 1);
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
